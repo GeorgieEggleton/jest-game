@@ -3,7 +3,7 @@
  */
 
 const { default: expect } = require("expect");
-const { game, newGame, showScore } = require("../game");
+const { game, newGame, showScore, addTurn } = require("../game");
 
 //Loads index.html into jest's mock DOM
 // FS libary is part of Node's default standard libary 
@@ -54,9 +54,22 @@ describe("newGame works correctly", () => {
     test("should clear playerMoves array", () => {
         expect(game.playerMoves.length).toBe(0);        /* need .length as it is an arrey this time not an interger as last one*/
     });
+   
+   
+    /*
+   This test now removed as we now are adding to the arrey so no longer need to test to see if it is empty, as it won't be
+
+
     test("should clear array of moves in the currentGame arrey created by the computer", () => {
-        expect(game.currentGame.length).toBe(0);        /* need .length as above & toBe as it is an arrey not a number "legth to be 0" */
+        expect(game.currentGame.length).toBe(0);         need .length as above & toBe as it is an arrey not a number "legth to be 0" 
     });
+
+    */
+    
+    test("There should be one move in the array of moves in the currentGame arrey created by the computer", () => {
+        expect(game.currentGame.length).toBe(1);         /* Updated test from commented out one above, now testing that there IS something in the array */
+    });
+
     test("should display 0 for the element with the ID of score", () => {
         expect(document.getElementById("score").innerText).toEqual(0);       /* finds the div with id score and checks if the inner text is reset to 0 */
     });
