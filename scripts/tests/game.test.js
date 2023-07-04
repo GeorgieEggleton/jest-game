@@ -3,7 +3,7 @@
  */
 
 const { default: expect } = require("expect");
-const { game } = require("../game");
+const { game, newGame, showScore } = require("../game");
 
 //Loads index.html into jest's mock DOM
 // FS libary is part of Node's default standard libary 
@@ -38,3 +38,26 @@ describe("game object contains correct keys", () => {
     });
 });
 
+
+describe("newGame works correctly", () => {
+    beforeAll(() => {
+        game.score = 42;                              /* Might be a random value to start with? Fake data to check if its cleared*/
+        game.playerMoves = ["button1", "button2"];   /* I think this puts in a starting piece of info so that there is something to be reset... but that may be wrong*/
+        game.currentGame = ["button1", "button2"];   /* As above*/
+        document.getElementById("score").innerTest = "42";    /*Sets the displayed score to 42*/
+        
+        newGame();                                          /*Calls the newGame function to see if the tests work*/
+    });
+    test("should set game score to 0", () => {
+        expect(game.score).toEqual(0);
+    });
+    test("should clear playerMoves array", () => {
+        expect(game.playerMoves.length).toBe(0);        /* need .length as it is an arrey this time not an interger as last one*/
+    });
+    test("should clear array of moves in the currentGame arrey created by the computer", () => {
+        expect(game.currentGame.length).toBe(0);        /* need .length as above & toBe as it is an arrey not a number "legth to be 0" */
+    });
+    test("should display 0 for the element with the ID of score", () => {
+        expect(document.getElementById("score").innerText).toEqual(0);       /* finds the div with id score and checks if the inner text is reset to 0 */
+    });
+});
