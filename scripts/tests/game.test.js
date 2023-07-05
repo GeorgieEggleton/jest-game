@@ -2,8 +2,20 @@
  * @jest-environment jsdom
  */
 
-const { default: expect } = require("expect");
-const { game, newGame, showScore, addTurn } = require("../game");
+//const { default: expect } = require("expect");
+//const { test } = require("picomatch");
+//const { default: expect } = require("expect");
+//const { test } = require("picomatch");
+const { game, newGame, showScore, addTurn, lightsOn, showTurns } = require("../game");
+//const { default: expect } = require("expect");
+//const { test } = require("picomatch");
+//const { lightsalmon } = require("color-name");
+//const { describe } = require("yargs");
+//const { beforeEach, afterEach } = require("jest-circus");
+
+
+
+
 
 //Loads index.html into jest's mock DOM
 // FS libary is part of Node's default standard libary 
@@ -36,6 +48,9 @@ describe("game object contains correct keys", () => {
     test("choices contains correct id's?", () => {
         expect(game.choices).toEqual(["button1", "button2", "button3", "button4"]);     /*Checks if the choices array now contains the correct items in the array*/
     });
+    test("turnNumber key exists?", () => {
+        expect("turnNumber" in game).toBe(true);     /*Checks if the choices array now contains the correct items in the array*/
+    });
 });
 
 
@@ -54,7 +69,13 @@ describe("newGame works correctly", () => {
     test("should clear playerMoves array", () => {
         expect(game.playerMoves.length).toBe(0);        /* need .length as it is an arrey this time not an interger as last one*/
     });
-   
+    test("expect data-listener to be true", () => {
+        const elements = document.getElementsByClassName("circle");
+        for (let element of elements) {
+            expect(element.getAttribute("data-listener")).toEqual("true");
+        }
+    });
+
    
     /*
    This test now removed as we now are adding to the arrey so no longer need to test to see if it is empty, as it won't be
@@ -74,3 +95,32 @@ describe("newGame works correctly", () => {
         expect(document.getElementById("score").innerText).toEqual(0);       /* finds the div with id score and checks if the inner text is reset to 0 */
     });
 });
+
+describe("GamePlay works correctly", () => {
+    beforeEach(() => {                              /* Before each runs before each test in run unlike beforeAll which runs before before all the tests*/
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+        addTurn();
+    });
+    afterEach(() => {
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+    });
+    test("Does addTurn adds a new turn to the game?", () => {
+        addTurn();
+        expect(game.currentGame.length).toBe(2);
+    }); 
+    test("should add correct class to light up the buttons", () => {
+        let button = document.getElementById(game.currentGame[0]);
+        lightsOn(game.currentGame[0]);
+        expect(button.classList).toContain("light");
+    });
+    test("showTurns should update game.turnNumber", ()=> {
+        game.turnNumber = 42;
+        showTurns();
+        expect(game.turnNumber).toBe(0);
+    });
+});
+
